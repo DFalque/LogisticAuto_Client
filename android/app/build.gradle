@@ -1,4 +1,6 @@
 apply plugin: "com.android.application"
+// apply plugin: 'com.google.gms.google-services' // <- Add this line EN TEORIA EL PAQUETE DE ARRIBA YA LO INCORPORA
+
 
 import com.android.build.OutputFile
 
