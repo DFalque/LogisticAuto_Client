@@ -1,5 +1,5 @@
 //COMPONENTS
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -26,6 +26,20 @@ import {NavigationContainer} from '@react-navigation/native';
 import WelcomeScreen from './src/screens/login/WelcomeScreen';
 import Login from './src/screens/login//Login';
 import SignUp from './src/screens/login/SignUp';
+// FIREBASE
+import {firebase} from '@react-native-firebase/database';
+import firebaseConfig from './database/firebase';
+import auth from '@react-native-firebase/auth';
+
+//VARIABLES
+//let deviceWidth = Dimensions.get('window').width;
+//let deviceHeight = Dimensions.get('window').height;
+
+if (!firebase.apps.length) {
+  console.log('dentro de inicializando app con firebase');
+  firebase.initializeApp(firebaseConfig);
+}
+
 // SCREENS MAIN
 import Home from './src/screens/main/Home';
 
@@ -49,12 +63,49 @@ const LoginStackScreen = () => {
   );
 };
 
+// CREATE MAIN STACK
+
+const MainStack = createStackNavigator();
+
+const MainStackScreen = () => {
+  return (
+    <MainStack.Navigator
+      initialRouteName="Home"
+      screenOptions={{headerShown: false}}
+      tabBarOption={{}}>
+      <LoginStack.Screen name="Home" component={Home} Options={{}} />
+    </MainStack.Navigator>
+  );
+};
+
 export default function App() {
+  const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
+
+  // Handle user state changes
+  function onAuthStateChanged(user) {
+    setUser(user);
+    if (initializing) setInitializing(false);
+  }
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
+
+  if (initializing) return null;
+
+  if (!user) {
+    return (
+      <NavigationContainer>
+        <LoginStackScreen />
+      </NavigationContainer>
+    );
+  }
 
   return (
     <NavigationContainer>
-      <LoginStackScreen />
+      <MainStackScreen />
     </NavigationContainer>
   );
 }

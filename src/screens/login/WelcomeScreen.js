@@ -7,8 +7,61 @@ import {
   StyleSheet,
   ImageBackground,
 } from 'react-native';
+//FIREBASE
+import auth from '@react-native-firebase/auth';
+import database from '@react-native-firebase/database';
 
-const WelcomeScreen = () => {
+const WelcomeScreen = props => {
+  const {navigation} = props;
+  const [formData, setFormData] = useState(defaultFormValue());
+
+  function defaultFormValue() {
+    return {
+      email: '',
+      password: '',
+    };
+  }
+
+  const onChange = (e, type) => {
+    setFormData({...formData, [type]: e});
+    console.log(formData);
+  };
+
+  const onSubmit = () => {
+    console.log(formData.email);
+    //console.log(validationEmail(formData.email));
+    //readFalse();
+    console.log('dentro del submit');
+    auth()
+      .createUserWithEmailAndPassword(formData.email, formData.password)
+      .then(response => {
+        console.log(response);
+        const id = response.user.uid;
+        console.log(id);
+        database()
+          .ref('/users/' + response.user.uid)
+          .set({
+            age: 32,
+            nombre: 'Paco',
+          })
+          .then(() => {
+            console.log('Data updated.');
+            console.log('User account created & signed in!');
+          });
+      })
+      .catch(error => {
+        if (error.code === 'auth/email-already-in-use') {
+          console.log('That email address is already in use!');
+        }
+
+        if (error.code === 'auth/invalid-email') {
+          console.log('That email address is invalid!');
+        }
+
+        console.error(error);
+      });
+  };
+
   return (
     <View>
       <View>
@@ -19,15 +72,10 @@ const WelcomeScreen = () => {
         <View>
           <TextInput
             underlineColorAndroid="transparent"
-            placeholder="Nombre de Usuario"
-            placeholderTextColor="grey"
-            autoCapitalize="none"
-          />
-          <TextInput
-            underlineColorAndroid="transparent"
             placeholder="Email"
             placeholderTextColor="grey"
             autoCapitalize="none"
+            onChangeText={e => onChange(e, 'email')}
           />
           <TextInput
             underlineColorAndroid="transparent"
@@ -35,9 +83,10 @@ const WelcomeScreen = () => {
             placeholderTextColor="grey"
             autoCapitalize="none"
             secureTextEntry={true}
+            onChangeText={e => onChange(e, 'password')}
           />
 
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => onSubmit()}>
             <Text> Submit </Text>
           </TouchableOpacity>
         </View>
