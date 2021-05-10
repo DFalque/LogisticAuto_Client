@@ -41,8 +41,7 @@ const WelcomeScreen = props => {
         database()
           .ref('/users/' + response.user.uid)
           .set({
-            age: 32,
-            nombre: 'Paco',
+            car: false,
           })
           .then(() => {
             console.log('Data updated.');
@@ -57,7 +56,6 @@ const WelcomeScreen = props => {
         if (error.code === 'auth/invalid-email') {
           console.log('That email address is invalid!');
         }
-
         console.error(error);
       });
   };
