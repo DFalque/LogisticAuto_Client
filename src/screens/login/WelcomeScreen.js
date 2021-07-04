@@ -10,6 +10,9 @@ import {
 //FIREBASE
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
+import firestore from '@react-native-firebase/firestore';
+
+const usersCollection = firestore();
 
 const img = require('../../img/aliLogo.png');
 
@@ -31,8 +34,6 @@ const WelcomeScreen = props => {
 
   const onSubmit = () => {
     console.log(formData.email);
-    //console.log(validationEmail(formData.email));
-    //readFalse();
     console.log('dentro del submit');
     auth()
       .createUserWithEmailAndPassword(formData.email, formData.password)
@@ -40,10 +41,11 @@ const WelcomeScreen = props => {
         console.log(response);
         const id = response.user.uid;
         console.log(id);
-        database()
-          .ref('/users/' + response.user.uid)
+        firestore()
+          .collection('Users')
+          .doc(id)
           .set({
-            car: false,
+            cars: [],
           })
           .then(() => {
             console.log('Data updated.');

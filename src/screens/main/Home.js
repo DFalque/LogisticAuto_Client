@@ -5,14 +5,18 @@ import {useFocusEffect} from '@react-navigation/native';
 //FIREBASE
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
+import firestore from '@react-native-firebase/firestore';
+
+const usersCollection = firestore();
 
 const Home = props => {
   const {navigation} = props;
-
-  const [haveCar, setHaveCar] = useState();
+  const [loading, setLoading] = useState('false');
+  const [haveCar, setHaveCar] = useState(false);
   const [info, setInfo] = useState('');
   const [infoCar, setInfoCar] = useState('');
   const [idCar, setIdCar] = useState('');
+  const [listCar, setListCar] = useState([]);
 
   //  DATA
 
@@ -20,31 +24,16 @@ const Home = props => {
     let obj = [];
     const id = [];
     const user = auth().currentUser.uid;
-    database() // cojo la información del usuario
-      .ref('/users/' + user)
-      .once('value')
-      .then(snapshot => {
-        let data = snapshot.val();
-        setHaveCar(data.car);
-        obj.push(data.info);
-        const [item] = obj;
-        setInfo(item); // se guarda la  información del usuario
-        id.push(data.idCar);
-        let [item2] = id;
-        setIdCar(item2); // se guarda el identificador del coche
-      });
-    const identificationCar = idCar;
-    const obj2 = [];
-    database() // cojo la información del vehículo
-      .ref('/cars/' + identificationCar)
-      .once('value')
-      .then(snapshot => {
-        let data = snapshot.val();
-        obj2.push(data);
-        let [item] = obj2;
-        setInfoCar(item);
-        console.log('infoCar');
-        console.log(infoCar);
+    firestore()
+      .collection('Users')
+      .doc(user)
+      .get()
+      .then(snap => {
+        console.log(snap);
+        let data = snap._data;
+        let {cars} = data;
+        console.log(cars);
+        setListCar(cars);
       });
   }, []);
 
@@ -64,32 +53,20 @@ const Home = props => {
   function carFalse() {
     return (
       <View style={styles.containerFalse}>
-        <Text>Bienvenido </Text>
-        <View style={styles.containerFalseButton}>
-          <TouchableOpacity
-            style={styles.addVehicule}
-            onPress={() => goToAddCar()}>
-            <Text>Boton </Text>
-          </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.addVehicule}
+          onPress={() => goToAddCar()}>
+          <Text style={styles.textPlus}>+</Text>
           <Text>Añadir Vehículo </Text>
-        </View>
+        </TouchableOpacity>
       </View>
     );
   }
 
   function carTrue() {
+    console.log(listCar);
     if (infoCar) {
-      return (
-        <View style={styles.containerTrue}>
-          <Text>ESTOS SON LOS DATOS DE MI COCHE</Text>
-          <Text>------------------------------</Text>
-          <Text>{infoCar.model}</Text>
-          <Text>{infoCar.status}</Text>
-          <Text>{infoCar.time}</Text>
-          <Text>{infoCar.model}</Text>
-          <Text>{infoCar.model}</Text>
-        </View>
-      );
+      return <View style={styles.containerTrue}></View>;
     } else {
       return (
         <View style={styles.containerTrue}>
@@ -99,35 +76,56 @@ const Home = props => {
     }
   }
 
-  return haveCar ? carTrue() : carFalse();
+  return (
+    <View style={styles.container}>
+      <View style={styles.messageContainer}>
+        <Text style={styles.messageText}>Hola Ali,</Text>
+        <Text style={styles.messageText}>Selecciona tu coche 👋</Text>
+      </View>
+      <View style={styles.carsContainer}>
+        {listCar.length === 0 ? carFalse() : carTrue()}
+      </View>
+    </View>
+  );
 };
 
 export default Home;
 
 const styles = StyleSheet.create({
-  containerFalse: {
-    flex: 1,
-  },
+  containerFalse: {},
   containerTrue: {
-    flex: 1,
-    justifyContent: 'center',
-    alignContent: 'center',
-    alignItems: 'center',
+    // justifyContent: 'center',
+    // alignContent: 'center',
+    //  alignItems: 'center',
   },
-  containerFalseButton: {
+  container: {
     flex: 1,
-    justifyContent: 'center',
-    alignContent: 'center',
-    alignItems: 'center',
+    // justifyContent: 'center'
   },
+  messageContainer: {
+    height: '25%',
+    justifyContent: 'center',
+  },
+  messageText: {
+    fontSize: 28,
+    lineHeight: 33,
+  },
+  carsContainer: {height: '50%', justifyContent: 'center'},
+  containerFalseButton: {},
   addVehicule: {
-    backgroundColor: 'green',
+    backgroundColor: 'rgba(151,210,253,0.4)',
     justifyContent: 'center',
     alignContent: 'center',
     alignItems: 'center',
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: 150,
+    height: 200,
+    marginStart: 10,
+    borderRadius: 10,
     marginBottom: 10,
+  },
+  textPlus: {
+    color: '#0066AE',
+    fontSize: 42,
+    lineHeight: 33,
   },
 });
