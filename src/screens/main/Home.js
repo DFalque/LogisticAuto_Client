@@ -11,14 +11,16 @@ const Home = props => {
 
   const [haveCar, setHaveCar] = useState();
   const [info, setInfo] = useState('');
+  const [infoCar, setInfoCar] = useState('');
+  const [idCar, setIdCar] = useState('');
 
   //  DATA
 
   useEffect(() => {
     let obj = [];
+    const id = [];
     const user = auth().currentUser.uid;
-    console.log(user);
-    database()
+    database() // cojo la información del usuario
       .ref('/users/' + user)
       .once('value')
       .then(snapshot => {
@@ -26,39 +28,38 @@ const Home = props => {
         setHaveCar(data.car);
         obj.push(data.info);
         const [item] = obj;
-        console.log(item); //salida correcta
-        setInfo(item);
-        console.log(info); // undefined
+        setInfo(item); // se guarda la  información del usuario
+        id.push(data.idCar);
+        let [item2] = id;
+        setIdCar(item2); // se guarda el identificador del coche
+      });
+    const identificationCar = idCar;
+    const obj2 = [];
+    database() // cojo la información del vehículo
+      .ref('/cars/' + identificationCar)
+      .once('value')
+      .then(snapshot => {
+        let data = snapshot.val();
+        obj2.push(data);
+        let [item] = obj2;
+        setInfoCar(item);
+        console.log('infoCar');
+        console.log(infoCar);
       });
   }, []);
-
-  useFocusEffect(
-    React.useCallback(() => {
-      let obj = [];
-      const user = auth().currentUser.uid;
-      console.log(user);
-      database()
-        .ref('/users/' + user)
-        .once('value')
-        .then(snapshot => {
-          let data = snapshot.val();
-          setHaveCar(data.car);
-          obj.push(data.info);
-          const [item] = obj;
-          console.log(item); //salida correcta
-          setInfo(item);
-          console.log(info); // undefined
-        });
-    }, []),
-  );
 
   ////////////////////////////////////////////////
 
   const goToAddCar = () => {
     navigation.navigate('AddCard', {
-      changeState: setHaveCar,
+      changeState: changeHaveCar,
     });
   };
+
+  function changeHaveCar() {
+    console.log('Se ha  cambiado la variable haveCar');
+    setHaveCar(true);
+  }
 
   function carFalse() {
     return (
@@ -77,22 +78,22 @@ const Home = props => {
   }
 
   function carTrue() {
-    if (info) {
+    if (infoCar) {
       return (
         <View style={styles.containerTrue}>
           <Text>ESTOS SON LOS DATOS DE MI COCHE</Text>
           <Text>------------------------------</Text>
-          <Text>{info.car}</Text>
-          <Text>{info.model}</Text>
-          <Text>{info.time}</Text>
-          <Text>{info.number}</Text>
-          <Text>{info.oil}</Text>
+          <Text>{infoCar.model}</Text>
+          <Text>{infoCar.status}</Text>
+          <Text>{infoCar.time}</Text>
+          <Text>{infoCar.model}</Text>
+          <Text>{infoCar.model}</Text>
         </View>
       );
     } else {
       return (
         <View style={styles.containerTrue}>
-          <Text>Cargando...</Text>
+          <Text>Cargando ...</Text>
         </View>
       );
     }

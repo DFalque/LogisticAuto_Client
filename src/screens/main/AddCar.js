@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import uuid from 'react-native-uuid';
 import {
   View,
   Text,
@@ -9,6 +10,7 @@ import {
 //FIREBASE
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AddCar = ({route, navigation}) => {
   console.log(route.params);
@@ -29,13 +31,45 @@ const AddCar = ({route, navigation}) => {
     console.log(infoCar);
   };
 
+  const storeData = async value => {
+    try {
+      await AsyncStorage.setItem('@someCar', value);
+    } catch (e) {
+      // saving error
+    }
+  };
+
   const addCarData = () => {
     const user = auth().currentUser.uid;
+    const carId = uuid.v4();
     database()
       .ref('/users/' + user)
       .update({
         car: true,
         info: infoCar,
+        idCar: carId,
+        status: {
+          state: 'ok',
+          notes: 'Ninguna nota',
+          changes: [],
+        },
+      })
+      .then(() => {
+        storeData('false');
+        console.log('Data updated.');
+      });
+    database()
+      .ref('/cars/' + carId)
+      .update({
+        car: infoCar.car,
+        model: infoCar.model,
+        time: infoCar.time,
+        number: infoCar.time,
+        oil: infoCar.oil,
+        owner: user,
+        status: 'ok',
+        history: ['Vacío'],
+        notes: ['Vació'],
       })
       .then(() => {
         console.log('Data updated.');

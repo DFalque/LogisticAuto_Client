@@ -92,6 +92,7 @@ export default function App() {
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    console.log(user);
     return subscriber; // unsubscribe on unmount
   }, []);
 
@@ -104,7 +105,6 @@ export default function App() {
       </NavigationContainer>
     );
   }
-
   return (
     <NavigationContainer>
       <MainStackScreen />
