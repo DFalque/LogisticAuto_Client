@@ -12,7 +12,7 @@ import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
 import firestore from '@react-native-firebase/firestore';
 
-const usersCollection = firestore();
+//const usersCollection = firestore();
 
 const img = require('../../img/aliLogo.png');
 

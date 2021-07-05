@@ -46,7 +46,6 @@ import AddCard from './src/screens/main/AddCar';
 
 //CREATE LOGIN STACK
 const LoginStack = createStackNavigator();
-
 const LoginStackScreen = () => {
   return (
     <LoginStack.Navigator

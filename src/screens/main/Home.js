@@ -4,18 +4,14 @@ import {useFocusEffect} from '@react-navigation/native';
 
 //FIREBASE
 import auth from '@react-native-firebase/auth';
-import database from '@react-native-firebase/database';
+//import database from '@react-native-firebase/database';
 import firestore from '@react-native-firebase/firestore';
 
-const usersCollection = firestore();
+//const usersCollection = firestore();
 
 const Home = props => {
   const {navigation} = props;
-  const [loading, setLoading] = useState('false');
-  const [haveCar, setHaveCar] = useState(false);
-  const [info, setInfo] = useState('');
-  const [infoCar, setInfoCar] = useState('');
-  const [idCar, setIdCar] = useState('');
+  const [loading, setLoading] = useState(true);
   const [listCar, setListCar] = useState([]);
 
   //  DATA
