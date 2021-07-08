@@ -1,37 +1,61 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import {useFocusEffect} from '@react-navigation/native';
+//import {useFocusEffect} from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
 
 //FIREBASE
 import auth from '@react-native-firebase/auth';
-//import database from '@react-native-firebase/database';
 import firestore from '@react-native-firebase/firestore';
-
-//const usersCollection = firestore();
 
 const Home = props => {
   const {navigation} = props;
   const [loading, setLoading] = useState(true);
   const [listCar, setListCar] = useState([]);
 
+  const [dataCar, setDataCar] = useState([]);
+  const isVisible = useIsFocused();
+
   //  DATA
 
   useEffect(() => {
-    let obj = [];
-    const id = [];
-    const user = auth().currentUser.uid;
-    firestore()
-      .collection('Users')
-      .doc(user)
-      .get()
-      .then(snap => {
-        console.log(snap);
-        let data = snap._data;
-        let {cars} = data;
-        console.log(cars);
-        setListCar(cars);
-      });
-  }, []);
+    if (isVisible) {
+      setLoading(true);
+      let obj = [];
+      const user = auth().currentUser.uid;
+      firestore()
+        .collection('Users')
+        .doc(user)
+        .get()
+        .then(snap => {
+          let data = snap._data;
+          let {cars} = data;
+          obj.push(cars);
+          setListCar(cars);
+          console.log('Esta es la lista estado');
+          console.log(listCar);
+        })
+        .then(() => {
+          if (listCar.lenght != 0) {
+            listCar.forEach(car => {
+              firestore()
+                .collection('Cars')
+                .doc(car)
+                .get()
+                .then(snap => {
+                  let data = snap._data;
+                  obj.push(data);
+                  setDataCar(obj);
+                });
+            });
+            setLoading(false);
+          } else {
+            setListCar([]);
+          }
+        });
+    }
+
+    console.log(dataCar);
+  }, [isVisible]);
 
   ////////////////////////////////////////////////
 
@@ -60,16 +84,25 @@ const Home = props => {
   }
 
   function carTrue() {
-    console.log(listCar);
-    if (infoCar) {
-      return <View style={styles.containerTrue}></View>;
-    } else {
+    const cosa = dataCar.map(car => {
+      const {model, brand} = car;
       return (
-        <View style={styles.containerTrue}>
-          <Text>Cargando ...</Text>
+        <View>
+          <Text>{model}</Text>
+          <Text>{brand}</Text>
         </View>
       );
-    }
+    });
+    return (
+      <View style={styles.containerTrue}>
+        <Text>Cargando ...</Text>
+        {cosa}
+      </View>
+    );
+  }
+
+  if (loading) {
+    return null;
   }
 
   return (

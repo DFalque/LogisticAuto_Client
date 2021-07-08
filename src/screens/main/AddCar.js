@@ -10,6 +10,7 @@ import {
 //FIREBASE
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
+import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AddCar = ({route, navigation}) => {
@@ -41,41 +42,35 @@ const AddCar = ({route, navigation}) => {
 
   const addCarData = () => {
     const user = auth().currentUser.uid;
-    const carId = uuid.v4();
-    database()
-      .ref('/users/' + user)
-      .update({
-        car: true,
-        info: infoCar,
-        idCar: carId,
-        status: {
-          state: 'ok',
-          notes: 'Ninguna nota',
-          changes: [],
-        },
-      })
-      .then(() => {
-        storeData('false');
-        console.log('Data updated.');
-      });
-    database()
-      .ref('/cars/' + carId)
-      .update({
-        car: infoCar.car,
+    //const carId = uuid.v4();
+    firestore()
+      .collection('Cars')
+      .add({
+        owner: user,
+        brand: infoCar.car,
         model: infoCar.model,
         time: infoCar.time,
-        number: infoCar.time,
+        number: infoCar.number,
         oil: infoCar.oil,
-        owner: user,
-        status: 'ok',
-        history: ['Vacío'],
-        notes: ['Vació'],
       })
-      .then(() => {
-        console.log('Data updated.');
+      .then(a => {
+        let {
+          _documentPath: {_parts},
+        } = a;
+        console.log(_parts[1]);
+        const idCar = _parts[1];
+        firestore()
+          .collection('Users')
+          .doc(user)
+          .update({
+            cars: firestore.FieldValue.arrayUnion(idCar),
+          })
+          .then(value => {
+            navigation.navigate('Home');
+          });
       });
-    route.params.changeState(true);
-    navigation.navigate('Home');
+
+    //route.params.changeState(true);
   };
 
   return (
