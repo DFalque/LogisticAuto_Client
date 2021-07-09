@@ -10,12 +10,11 @@ import firestore from '@react-native-firebase/firestore';
 const Home = props => {
   const {navigation} = props;
   const [loading, setLoading] = useState(true);
+  // I save the ID of the user's cars in this state
   const [listCar, setListCar] = useState([]);
-
+  // The data of the user's cars in this state
   const [dataCar, setDataCar] = useState([]);
   const isVisible = useIsFocused();
-
-  //  DATA
 
   useEffect(() => {
     if (isVisible) {
@@ -29,32 +28,24 @@ const Home = props => {
         .then(snap => {
           let data = snap._data;
           let {cars} = data;
-          obj.push(cars);
           setListCar(cars);
-          console.log('Esta es la lista estado');
           console.log(listCar);
-        })
-        .then(() => {
-          if (listCar.lenght != 0) {
-            listCar.forEach(car => {
-              firestore()
-                .collection('Cars')
-                .doc(car)
-                .get()
-                .then(snap => {
-                  let data = snap._data;
-                  obj.push(data);
-                  setDataCar(obj);
-                });
-            });
-            setLoading(false);
-          } else {
-            setListCar([]);
-          }
         });
+      if (listCar.lenght != 0) {
+        listCar.forEach(car => {
+          firestore()
+            .collection('Cars')
+            .doc(car)
+            .get()
+            .then(snap => {
+              let data = snap._data;
+              obj.push(data);
+              setDataCar(obj);
+            });
+        });
+      }
+      setLoading(false);
     }
-
-    console.log(dataCar);
   }, [isVisible]);
 
   ////////////////////////////////////////////////
@@ -64,11 +55,6 @@ const Home = props => {
       changeState: changeHaveCar,
     });
   };
-
-  function changeHaveCar() {
-    console.log('Se ha  cambiado la variable haveCar');
-    setHaveCar(true);
-  }
 
   function carFalse() {
     return (
@@ -95,14 +81,10 @@ const Home = props => {
     });
     return (
       <View style={styles.containerTrue}>
-        <Text>Cargando ...</Text>
+        <Text>The data should now appear</Text>
         {cosa}
       </View>
     );
-  }
-
-  if (loading) {
-    return null;
   }
 
   return (
