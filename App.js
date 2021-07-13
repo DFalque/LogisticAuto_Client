@@ -43,6 +43,7 @@ if (!firebase.apps.length) {
 // SCREENS MAIN
 import Home from './src/screens/main/Home';
 import AddCard from './src/screens/main/AddCar';
+import InfoCar from './src/screens/main/InfoCar';
 
 //CREATE LOGIN STACK
 const LoginStack = createStackNavigator();
@@ -75,6 +76,7 @@ const MainStackScreen = () => {
       tabBarOption={{}}>
       <LoginStack.Screen name="Home" component={Home} Options={{}} />
       <LoginStack.Screen name="AddCard" component={AddCard} Options={{}} />
+      <LoginStack.Screen name="InfoCar" component={InfoCar} Options={{}} />
     </MainStack.Navigator>
   );
 };

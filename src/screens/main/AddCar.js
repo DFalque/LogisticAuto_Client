@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
+  ImageBackground,
 } from 'react-native';
 //FIREBASE
 import auth from '@react-native-firebase/auth';
@@ -16,6 +17,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const AddCar = ({route, navigation}) => {
   console.log(route.params);
   const [infoCar, setInfoCar] = useState(defaultInfo());
+  const img = require('../../img/audi.jpg');
 
   function defaultInfo() {
     return {
@@ -42,7 +44,6 @@ const AddCar = ({route, navigation}) => {
 
   const addCarData = () => {
     const user = auth().currentUser.uid;
-    //const carId = uuid.v4();
     firestore()
       .collection('Cars')
       .add({
@@ -75,44 +76,65 @@ const AddCar = ({route, navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Text>Vamos a crear un cochesito</Text>
-      <TextInput
-        underlineColorAndroid="transparent"
-        placeholder="Tipo de coche"
-        placeholderTextColor="grey"
-        autoCapitalize="none"
-        onChangeText={e => changeInfo(e, 'car')}
-      />
-      <TextInput
-        underlineColorAndroid="transparent"
-        placeholder="Modelo"
-        placeholderTextColor="grey"
-        autoCapitalize="none"
-        onChangeText={e => changeInfo(e, 'model')}
-      />
-      <TextInput
-        underlineColorAndroid="transparent"
-        placeholder="Años"
-        placeholderTextColor="grey"
-        autoCapitalize="none"
-        onChangeText={e => changeInfo(e, 'time')}
-      />
-      <TextInput
-        underlineColorAndroid="transparent"
-        placeholder="Matrícula"
-        placeholderTextColor="grey"
-        autoCapitalize="none"
-        onChangeText={e => changeInfo(e, 'number')}
-      />
-      <TextInput
-        underlineColorAndroid="transparent"
-        placeholder="Combustible"
-        placeholderTextColor="grey"
-        autoCapitalize="none"
-        onChangeText={e => changeInfo(e, 'oil')}
-      />
-      <TouchableOpacity onPress={() => addCarData()}>
-        <Text> Guardar </Text>
+      <View style={styles.containerImg}>
+        <Text style={styles.messageText}>Añade los datos</Text>
+        <Text style={styles.messageText}>de tu Vehículo 🚀</Text>
+      </View>
+      <View style={styles.containerInputBig}>
+        <Text style={styles.level}>Seleccionar Marca</Text>
+        <TextInput
+          style={styles.input}
+          underlineColorAndroid="transparent"
+          placeholderTextColor="black"
+          autoCapitalize="none"
+          onChangeText={e => changeInfo(e, 'car')}
+        />
+      </View>
+
+      <View style={styles.containerInputBig}>
+        <Text style={styles.level}>Seleccionar Modelo</Text>
+        <TextInput
+          style={styles.input}
+          underlineColorAndroid="transparent"
+          placeholderTextColor="black"
+          autoCapitalize="none"
+          onChangeText={e => changeInfo(e, 'model')}
+        />
+      </View>
+
+      <View style={styles.containerInputBig}>
+        <Text style={styles.level}>Año</Text>
+        <TextInput
+          style={styles.input}
+          underlineColorAndroid="transparent"
+          placeholderTextColor="black"
+          autoCapitalize="none"
+          onChangeText={e => changeInfo(e, 'time')}
+        />
+      </View>
+      <View style={styles.containerInputBig}>
+        <Text style={styles.level}>Matricula</Text>
+        <TextInput
+          style={styles.input}
+          underlineColorAndroid="transparent"
+          placeholderTextColor="black"
+          autoCapitalize="none"
+          onChangeText={e => changeInfo(e, 'number')}
+        />
+      </View>
+      <View style={styles.containerInputBig}>
+        <Text style={styles.level}>Combustible</Text>
+        <TextInput
+          style={styles.input}
+          underlineColorAndroid="transparent"
+          placeholderTextColor="black"
+          autoCapitalize="none"
+          onChangeText={e => changeInfo(e, 'oil')}
+        />
+      </View>
+
+      <TouchableOpacity style={styles.button} onPress={() => addCarData()}>
+        <Text style={{color: 'white'}}> Guardar </Text>
       </TouchableOpacity>
     </View>
   );
@@ -123,8 +145,48 @@ export default AddCar;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'white',
+  },
+  containerImg: {
+    height: '30%',
+    justifyContent: 'center',
+    marginStart: 10,
+    // alignContent: 'center',
+    // alignItems: 'center',
+  },
+  image: {
+    flex: 1,
+    resizeMode: 'cover',
+  },
+  button: {
+    alignSelf: 'center',
     justifyContent: 'center',
     alignContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'black',
+    width: 200,
+    height: 50,
+    borderRadius: 10,
+  },
+  messageText: {
+    fontSize: 28,
+    lineHeight: 40,
+  },
+  input: {
+    backgroundColor: '#F2F2F2',
+    width: '80%',
+    borderRadius: 10,
+  },
+  containerInputBig: {
+    marginBottom: 15,
+    width: '100%',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
+  },
+  level: {
+    alignSelf: 'flex-start',
+    marginStart: 50,
   },
 });
