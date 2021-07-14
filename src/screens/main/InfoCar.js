@@ -26,6 +26,7 @@ function InfoCar(props) {
       <Text>{brand}</Text>
       <Text>{number}</Text>
       <Text>{oil}</Text>
+      <Text>{oil}</Text>
       <Text>{time}</Text>
     </View>
   );
