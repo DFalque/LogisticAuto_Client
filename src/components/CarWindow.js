@@ -10,7 +10,7 @@ import {
 
 const CarWindow = props => {
   const {item, navigation} = props;
-  const {model, brand, carId, number, oil, time, owner} = item;
+  const {model, brand, carId, number, oil, time, owner, status} = item;
   const img = require('../img/audi.jpg');
   console.log(navigation);
 
@@ -43,7 +43,7 @@ const CarWindow = props => {
           <Text>{model}</Text>
           <Text>{brand}</Text>
         </View>
-        <Text>Ready</Text>
+        <Text>{status}</Text>
       </View>
     </TouchableOpacity>
   );

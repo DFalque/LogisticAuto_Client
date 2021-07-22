@@ -41,6 +41,7 @@ const Home = props => {
               oil: doc.data().oil,
               owner: doc.data().owner,
               time: doc.data().time,
+              status: doc.data().status,
             });
           });
           console.log(cars);

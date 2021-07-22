@@ -17,7 +17,7 @@ function InfoCar(props) {
   const img = require('../../img/audi.jpg');
 
   return (
-    <View styles={{flex: 1}}>
+    <View styles={{flex: 1, backgroundColor: 'white'}}>
       <Text style={styles.tittle}>{model}</Text>
       <View style={styles.containerImg}>
         <ImageBackground source={img} style={styles.image}></ImageBackground>
@@ -28,6 +28,28 @@ function InfoCar(props) {
       <Text>{oil}</Text>
       <Text>{oil}</Text>
       <Text>{time}</Text>
+      <View style={styles.containerButton}>
+        <TouchableOpacity
+          style={styles.buttonSecondary}
+          onPress={() => handleEventCar()}>
+          <Text style={{color: 'black'}}>Información</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.buttonSecondary}
+          onPress={() => handleEventCar()}>
+          <Text style={{color: 'black'}}>Historial</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.buttonSecondary}
+          onPress={() => handleEventCar()}>
+          <Text style={{color: 'black'}}>Añadir Evento</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.buttonSecondary}
+          onPress={() => handleEventCar()}>
+          <Text style={{color: 'black'}}>Buscar Taller</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -35,7 +57,7 @@ function InfoCar(props) {
 export default InfoCar;
 
 const styles = StyleSheet.create({
-  containerImg: {height: '50%'},
+  containerImg: {height: '40%'},
   image: {
     flex: 1,
     resizeMode: 'cover',
@@ -46,5 +68,26 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     fontSize: 28,
     lineHeight: 33,
+  },
+  containerButton: {
+    alignSelf: 'center',
+    width: '90%',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  buttonSecondary: {
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    width: 150,
+    marginRight: 20,
+    height: 50,
+    borderRadius: 10,
+    marginTop: 10,
+    borderStyle: 'solid',
+    borderBottomColor: 'black',
+    borderWidth: 2,
   },
 });
