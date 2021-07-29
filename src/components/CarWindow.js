@@ -23,6 +23,7 @@ const CarWindow = props => {
       oil: oil,
       time: time,
       owner: owner,
+      status: status,
     });
   };
 

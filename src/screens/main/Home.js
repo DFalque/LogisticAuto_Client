@@ -73,7 +73,7 @@ const Home = props => {
 
   function carTrue() {
     const cosa = dataCar.map(car => {
-      const {model, brand, carId, number, oil, time, owner} = car;
+      const {model, brand, carId, number, oil, time, owner, status} = car;
       return (
         <View style={{backgroundColor: '#fff', margin: 5, borderRadius: 10}}>
           <Text style={{margin: 5, fontSize: 16}}>CarId: {carId}</Text>

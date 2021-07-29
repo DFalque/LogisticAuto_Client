@@ -26,6 +26,7 @@ const AddCar = ({route, navigation}) => {
       time: '',
       number: '',
       oil: '',
+      status: '',
     };
   }
 
@@ -53,6 +54,7 @@ const AddCar = ({route, navigation}) => {
         time: infoCar.time,
         number: infoCar.number,
         oil: infoCar.oil,
+        status: 'ready',
       })
       .then(a => {
         let {
