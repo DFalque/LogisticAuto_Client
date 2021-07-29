@@ -41,10 +41,20 @@ const CarWindow = props => {
       </View>
       <View style={styles.containerInfo}>
         <View style={styles.containerInfoModel}>
-          <Text>{model}</Text>
-          <Text>{brand}</Text>
+          <Text style={{alignSelf: 'center'}}>{model}</Text>
         </View>
-        <Text>{status}</Text>
+        <View style={styles.containerStatusCar}>
+          <View
+            style={{
+              backgroundColor: '#E2E2E2',
+              paddingStart: 20,
+              marginStart: 10,
+              paddingEnd: 20,
+              borderRadius: 20,
+            }}>
+            <Text>{status}</Text>
+          </View>
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -88,4 +98,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   containerInfoModel: {height: '70%'},
+  containerStatusCar: {flexDirection: 'row'},
 });

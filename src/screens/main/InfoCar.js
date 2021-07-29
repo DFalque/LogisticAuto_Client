@@ -19,6 +19,11 @@ function InfoCar(props) {
   console.log(params);
   const img = require('../../img/audi.jpg');
   const imgInfo = require('../../img/infoButton.png');
+  const imgHistorial = require('../../img/historialIcon.png');
+  const imgRepair = require('../../img/repairIcon.png');
+  const imgChat = require('../../img/chatIcon.png');
+  const imgShop = require('../../img/workshopIcon.png');
+  const imgBill = require('../../img/billIcon.png');
 
   const statusCar = {
     ready: 'Listo',
@@ -94,7 +99,7 @@ function InfoCar(props) {
           onPress={() => handleEventCar()}>
           <View style={styles.icon}>
             <ImageBackground
-              source={imgInfo}
+              source={imgHistorial}
               style={styles.image}></ImageBackground>
           </View>
           <Text style={{color: 'black'}}>Historial</Text>
@@ -104,7 +109,7 @@ function InfoCar(props) {
           onPress={() => handleEventCar()}>
           <View style={styles.icon}>
             <ImageBackground
-              source={imgInfo}
+              source={imgRepair}
               style={styles.image}></ImageBackground>
           </View>
           <Text style={{color: 'black'}}>Reparación</Text>
@@ -114,7 +119,7 @@ function InfoCar(props) {
           onPress={() => handleEventCar()}>
           <View style={styles.icon}>
             <ImageBackground
-              source={imgInfo}
+              source={imgChat}
               style={styles.image}></ImageBackground>
           </View>
           <Text style={{color: 'black'}}>Chat</Text>
@@ -125,7 +130,7 @@ function InfoCar(props) {
           onPress={() => handleEventCar()}>
           <View style={styles.icon}>
             <ImageBackground
-              source={imgInfo}
+              source={imgShop}
               style={styles.image}></ImageBackground>
           </View>
           <Text style={{color: 'black'}}>Talleres</Text>
@@ -135,7 +140,7 @@ function InfoCar(props) {
           onPress={() => handleEventCar()}>
           <View style={styles.icon}>
             <ImageBackground
-              source={imgInfo}
+              source={imgBill}
               style={styles.image}></ImageBackground>
           </View>
           <Text style={{color: 'black'}}>Facturas</Text>
